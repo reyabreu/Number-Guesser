@@ -1,5 +1,8 @@
 extends Node
 
+onready var messageLabel = $Message;
+onready var rightButton = $Right
+
 # 0 ~ 1000
 var guess
 
@@ -15,7 +18,7 @@ func _ready():
 	print("---------------------------")
 	print("Hello from Number Guesser")
 	print("I'll guess any number that you think between 0 and 1000")
-	print("Is " + str(guess) + " your number?")
+	messageLabel.text = "Is " + str(guess) + " your number?"
 
 func _process(delta):
 	if Input.is_action_just_pressed("up"):
@@ -29,8 +32,10 @@ func _process(delta):
 			_end_game()
 
 func _end_game():
-	try_again = true	
-	print ("Yes! I knew youre number was " + str(guess) + "!")	
+	try_again = true
+	messageLabel.text = "Yes! I knew your number was " + str(guess) + "!"
+	print ("Yes! I knew your number was " + str(guess) + "!")
+	rightButton.text = "Restart"
 
 func _restart_game():
 	get_tree().reload_current_scene()
@@ -41,4 +46,19 @@ func _handle_action(action):
 	else:
 		max_guessed = guess
 	guess = (min_guessed + max_guessed) / 2
+	messageLabel.text = "Is " + str(guess) + " your number?"
 	print("Is " + str(guess) + " your number?")
+	
+
+func _on_Greater_pressed():
+	_handle_action("up")
+
+func _on_Lesser_pressed():
+	_handle_action("down")
+
+func _on_Right_pressed():
+	if try_again:
+		_restart_game()
+	else:
+		_end_game()
+
